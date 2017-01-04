@@ -82,12 +82,15 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+def appId = System.getenv("GRADLE_APP_IDENTIFIER") ?: 'com.geomesse.debug'
+def appName = System.getenv("GRADLE_APP_NAME") ?: 'GéoMesse Debug'
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.geomesse"
+        applicationId System.getenv("GRADLE_APP_IDENTIFIER")
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
@@ -104,10 +107,23 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
-    buildTypes {
+    signingConfigs {
         release {
+            storeFile file(String.valueOf(System.getenv("GRADLE_KEYSTORE")))
+            storePassword System.getenv("GRADLE_KEYSTORE_PASSWORD")
+            keyAlias System.getenv("GRADLE_KEYSTORE_ALIAS")
+            keyPassword System.getenv("GRADLE_KEYSTORE_ALIAS_PASSWORD")
+        }
+    }
+    buildTypes {
+        debug {
+            resValue "string", "app_name", appName
+        }
+        release {
+            resValue "string", "app_name", appName
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
