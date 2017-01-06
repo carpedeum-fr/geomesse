@@ -23,32 +23,32 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   searchInput: {
-      height: 50,
-      padding: 4,
-      marginRight: 5,
-      fontSize: 23,
-      borderWidth: 1,
-      borderColor: 'white',
-      borderRadius: 8,
-      color: 'white'
+    height: 50,
+    padding: 4,
+    marginRight: 5,
+    fontSize: 23,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 8,
+    color: 'white',
   },
   buttonText: {
-       fontSize: 18,
-       color: '#111',
-       alignSelf: 'center'
-   },
+    fontSize: 18,
+    color: '#111',
+    alignSelf: 'center',
+  },
   button: {
-       height: 45,
-       flexDirection: 'row',
-       backgroundColor: 'white',
-       borderColor: 'white',
-       borderWidth: 1,
-       borderRadius: 8,
-       marginBottom: 10,
-       marginTop: 10,
-       alignSelf: 'stretch',
-       justifyContent: 'center'
-   },
+    height: 45,
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    marginTop: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+  },
 });
 
 type PropsType = {
@@ -62,47 +62,46 @@ class Home extends Component {
       title: 'GéoMesse',
     },
   }
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      isLoading: false,
+      error: false,
+    };
+  }
+
+  props: PropsType;
 
   _goToInfos = () => {
     this.props.navigator.push(Router.getRoute('infos'));
   }
 
-  props: PropsType;
-
-  constructor(props){
-    super(props);
-    this.state = {
-        username: '',
-        isLoading: false,
-        error: false
-    }
-  }
-
-  handleChange(event){
-      this.setState({
-          username: event.nativeEvent.text
-      })
-  }
-
-  handleSubmit(){
+  handleChange(event) {
     this.setState({
-      isLoading: true
+      username: event.nativeEvent.text,
+    });
+  }
+
+  handleSubmit() {
+    this.setState({
+      isLoading: true,
     });
     api.getBio(this.state.username).then((res) => {
-      if(res.message === 'Not Found'){
+      if (res.message === 'Not Found') {
         this.setState({
           error: 'User not found',
-          isLoading: false
-        })
+          isLoading: false,
+        });
       } else {
-        this.props.navigator.push(Router.getRoute('infos'));
+        this.props.navigator.push(Router.getRoute('infos', { userInfo: res }));
         this.setState({
           isLoading: false,
           error: false,
-          username: ''
-        })
+          username: '',
+        });
       }
-    })
+    });
   }
 
   render() {
@@ -111,14 +110,16 @@ class Home extends Component {
         <View style={styles.container}>
           <Text style={styles.welcome}>Chercher une messe</Text>
           <TextInput
-              style={styles.searchInput}
-              value={this.state.username}
-              onChange={this.handleChange.bind(this)} />
+            style={styles.searchInput}
+            value={this.state.username}
+            onChange={() => this.handleChange()}
+          />
           <TouchableHighlight
-              style={styles.button}
-              onPress={this.handleSubmit.bind(this)}
-              underlayColor="white">
-              <Text style={styles.buttonText}> Chercher </Text>
+            style={styles.button}
+            onPress={() => this.handleSubmit()}
+            underlayColor="white"
+          >
+            <Text style={styles.buttonText}> Chercher </Text>
           </TouchableHighlight>
           <Text style={styles.instructions}>
             This is page the home
