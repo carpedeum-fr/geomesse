@@ -1,13 +1,15 @@
-const api = {
-  getBio(username) {
-    username = username.toLowerCase().trim();
-    var url = `https://api.github.com/users/${username}`;
-    return fetch(url).then((res) => res.json())
-  },
-  getPlaces() {
-    var url = `http://geomesse.ghirardotti.fr/api/place`;
-    return fetch(url).then((res) => res.json());
-  }
-};
+import request from 'superagent';
+// import { baseApiUrl } from 'geomesse/environment';
 
-module.exports = api;
+function getPlaces(): Promise<*> {
+  return request
+  .get('https://api.github.com/users/JusteLeblanc')
+  // .get(`${baseApiUrl}/api/place/1074`)
+  .then((response) => {
+    console.log(response.body);
+    return (response.body);
+  })
+  .catch((error) => { console.log('error', error); });
+}
+
+export default getPlaces;

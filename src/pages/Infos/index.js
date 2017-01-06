@@ -41,12 +41,8 @@ class Infos extends Component {
           <Text style={styles.welcome}>
             This is the Infos Page
           </Text>
-          <Text style={styles.instructions}>
-            It means you have a working router
-          </Text>
-          <Text style={styles.instructions}>
-            Double tap R on your keyboard to reload,{'\n'}
-            Shake or press menu button for dev menu
+          <Text>
+            {this.props.places}
           </Text>
         </View>
       </Page>

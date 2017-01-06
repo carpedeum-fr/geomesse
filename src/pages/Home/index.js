@@ -4,7 +4,7 @@ import { withNavigation } from '@exponent/ex-navigation';
 
 import Router from 'geomesse/src/Router.js';
 import { Page, Button } from 'geomesse/src/components';
-import api from '../../utils/api.js';
+import getPlaces from 'geomesse/src/utils/api.js';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,7 +65,6 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
       isLoading: false,
       error: false,
     };
@@ -87,20 +86,12 @@ class Home extends Component {
     this.setState({
       isLoading: true,
     });
-    api.getBio(this.state.username).then((res) => {
-      if (res.message === 'Not Found') {
-        this.setState({
-          error: 'User not found',
-          isLoading: false,
-        });
-      } else {
-        this.props.navigator.push(Router.getRoute('infos', { userInfo: res }));
-        this.setState({
-          isLoading: false,
-          error: false,
-          username: '',
-        });
-      }
+    getPlaces().then((res) => {
+      this.props.navigator.push(Router.getRoute('infos', { places: res }));
+      this.setState({
+        isLoading: false,
+        error: false,
+      });
     });
   }
 
@@ -108,11 +99,11 @@ class Home extends Component {
     return (
       <Page>
         <View style={styles.container}>
-          <Text style={styles.welcome}>Chercher une messe</Text>
+          <Text style={styles.welcome}>Chercher un lieu</Text>
           <TextInput
             style={styles.searchInput}
             value={this.state.username}
-            onChange={() => this.handleChange()}
+            onChange={event => this.handleChange(event)}
           />
           <TouchableHighlight
             style={styles.button}
