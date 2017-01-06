@@ -4,7 +4,9 @@ import { withNavigation } from '@exponent/ex-navigation';
 
 import Router from 'geomesse/src/Router.js';
 import { Page, Button } from 'geomesse/src/components';
-import getPlaces from 'geomesse/src/utils/api.js';
+import getPlaces from 'geomesse/src/utils/api';
+
+import appStyle from 'geomesse/src/appStyle';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,41 +15,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   welcome: {
-    fontSize: 20,
+    fontSize: appStyle.font.fontSize.huge,
     textAlign: 'center',
-    margin: 10,
+    margin: appStyle.grid.x1,
   },
   instructions: {
     textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    color: appStyle.colors.primary,
+    marginBottom: appStyle.grid.x1,
   },
   searchInput: {
-    height: 50,
+    height: appStyle.dimensions.touchableHeight,
     padding: 4,
     marginRight: 5,
     fontSize: 23,
     borderWidth: 1,
     borderColor: 'white',
     borderRadius: 8,
-    color: 'white',
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#111',
-    alignSelf: 'center',
-  },
-  button: {
-    height: 45,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderColor: 'white',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 10,
-    marginTop: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
+    color: 'black',
   },
 });
 
@@ -72,17 +57,14 @@ class Home extends Component {
 
   props: PropsType;
 
-  _goToInfos = () => {
-    this.props.navigator.push(Router.getRoute('infos'));
-  }
-
   handleChange(event) {
     this.setState({
       username: event.nativeEvent.text,
     });
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     this.setState({
       isLoading: true,
     });
@@ -105,17 +87,7 @@ class Home extends Component {
             value={this.state.username}
             onChange={event => this.handleChange(event)}
           />
-          <TouchableHighlight
-            style={styles.button}
-            onPress={() => this.handleSubmit()}
-            underlayColor="white"
-          >
-            <Text style={styles.buttonText}> Chercher </Text>
-          </TouchableHighlight>
-          <Text style={styles.instructions}>
-            This is page the home
-          </Text>
-          <Button onPress={this._goToInfos}>Go to the Info page</Button>
+          <Button onPress={event => this.handleSubmit(event)}>Chercher</Button>
         </View>
       </Page>
     );
