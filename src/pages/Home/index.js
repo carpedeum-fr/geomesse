@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
 import { withNavigation } from '@exponent/ex-navigation';
 
 import Router from 'geomesse/src/Router.js';
 import { Page, Button } from 'geomesse/src/components';
+import getPlaces from 'geomesse/src/utils/api';
+
+import appStyle from 'geomesse/src/appStyle';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,14 +15,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   welcome: {
-    fontSize: 20,
+    fontSize: appStyle.font.fontSize.huge,
     textAlign: 'center',
-    margin: 10,
+    margin: appStyle.grid.x1,
   },
   instructions: {
     textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    color: appStyle.colors.primary,
+    marginBottom: appStyle.grid.x1,
+  },
+  searchInput: {
+    height: appStyle.dimensions.touchableHeight,
+    padding: 4,
+    marginRight: 5,
+    fontSize: 23,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 8,
+    color: 'black',
   },
 });
 
@@ -31,31 +44,50 @@ type PropsType = {
 class Home extends Component {
   static route = {
     navigationBar: {
-      title: 'Home',
+      title: 'GéoMesse',
     },
   }
-
-  _goToInfos = () => {
-    this.props.navigator.push(Router.getRoute('infos'));
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      error: false,
+    };
   }
 
   props: PropsType;
+
+  handleChange(event) {
+    this.setState({
+      username: event.nativeEvent.text,
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.setState({
+      isLoading: true,
+    });
+    getPlaces().then((res) => {
+      this.props.navigator.push(Router.getRoute('infos', { places: res }));
+      this.setState({
+        isLoading: false,
+        error: false,
+      });
+    });
+  }
 
   render() {
     return (
       <Page>
         <View style={styles.container}>
-          <Text style={styles.welcome}>
-            Welcome to React Native!
-          </Text>
-          <Text style={styles.instructions}>
-            This is page the home
-          </Text>
-          <Text style={styles.instructions}>
-            Double tap R on your keyboard to reload,{'\n'}
-            Shake or press menu button for dev menu
-          </Text>
-          <Button onPress={this._goToInfos}>Go to the Info page</Button>
+          <Text style={styles.welcome}>Chercher un lieu</Text>
+          <TextInput
+            style={styles.searchInput}
+            value={this.state.username}
+            onChange={event => this.handleChange(event)}
+          />
+          <Button onPress={event => this.handleSubmit(event)}>Chercher</Button>
         </View>
       </Page>
     );

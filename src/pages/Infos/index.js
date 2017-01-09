@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { withNavigation } from '@exponent/ex-navigation';
 import { Page } from 'geomesse/src/components';
+import appStyle from 'geomesse/src/appStyle';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,19 +11,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   welcome: {
-    fontSize: 20,
+    fontSize: appStyle.font.fontSize.huge,
     textAlign: 'center',
-    margin: 10,
+    margin: appStyle.grid.x1,
   },
   instructions: {
     textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    color: appStyle.colors.primary,
+    marginBottom: appStyle.grid.x1,
   },
 });
 
 type PropsType = {
   navigator: any,
+  places: Object,
 };
 
 @withNavigation
@@ -39,14 +41,10 @@ class Infos extends Component {
       <Page>
         <View style={styles.container}>
           <Text style={styles.welcome}>
-            This is the Infos Page
+            Ceci est une page de test qui affiche un lieu par défaut
           </Text>
-          <Text style={styles.instructions}>
-            It means you have a working router
-          </Text>
-          <Text style={styles.instructions}>
-            Double tap R on your keyboard to reload,{'\n'}
-            Shake or press menu button for dev menu
+          <Text>
+            {this.props.places.name}
           </Text>
         </View>
       </Page>
