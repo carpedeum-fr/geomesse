@@ -41,10 +41,10 @@ class Infos extends Component {
       <Page>
         <View style={styles.container}>
           <Text style={styles.welcome}>
-            This is the Infos Page
+            Ceci est une page de test qui affiche un lieu par défaut
           </Text>
           <Text>
-            {this.props.places.toString()}
+            {this.props.places.name}
           </Text>
         </View>
       </Page>

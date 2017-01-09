@@ -1,4 +1,4 @@
 module.exports = {
   ENV: 'staging',
-  baseApiUrl: 'http://geomesse.ghirardotti.fr',
+  baseApiUrl: 'https://geomesse.ghirardotti.fr',
 };
