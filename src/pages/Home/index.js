@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-nat
 import { withNavigation } from '@exponent/ex-navigation';
 
 import Router from 'geomesse/src/Router.js';
-import { Page, Button } from 'geomesse/src/components';
-import getPlaces from 'geomesse/src/utils/api';
+import { Page, Button, GeoLocation } from 'geomesse/src/components';
+import { getPlaces } from 'geomesse/src/utils/api';
 
 import appStyle from 'geomesse/src/appStyle';
 
@@ -88,6 +88,7 @@ class Home extends Component {
             onChange={event => this.handleChange(event)}
           />
           <Button onPress={event => this.handleSubmit(event)}>Chercher</Button>
+          <GeoLocation />
         </View>
       </Page>
     );
